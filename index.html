@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReelSense | Find Your Next Movie</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="#home" class="logo">Reel<span>Sense</span> ✦</a>
+        <nav class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#moods">Browse</a>
+            <a href="#movie-result">Your Match</a>
+            <a href="#about">About</a>
+        </nav>
+        <a href="#movie-result" class="nav-heart" aria-label="Your recommendation">♥</a>
+    </header>
+
+    <main id="home">
+        <section class="hero">
+            <p class="eyebrow">YOUR NEXT MOVIE IS WAITING</p>
+            <h1>What's your <span>vibe</span> tonight?</h1>
+            <p class="hero-description">
+                Tell us how you're feeling. We'll find a film that fits your mood.
+            </p>
+        </section>
+
+        <section class="mood-section" id="moods">
+            <h2><span class="section-number">01 /</span> Choose your mood</h2>
+
+            <div class="mood-grid">
+                <button class="mood-btn active" data-mood="comfort" type="button">
+                    <span class="mood-icon">☁️</span><span>Comfort me</span>
+                </button>
+                <button class="mood-btn" data-mood="comedy" type="button">
+                    <span class="mood-icon">☀️</span><span>Make me laugh</span>
+                </button>
+                <button class="mood-btn" data-mood="thoughtful" type="button">
+                    <span class="mood-icon">🧠</span><span>Make me think</span>
+                </button>
+                <button class="mood-btn" data-mood="thriller" type="button">
+                    <span class="mood-icon">⚡</span><span>Keep me on edge</span>
+                </button>
+                <button class="mood-btn" data-mood="romance" type="button">
+                    <span class="mood-icon">❤️</span><span>Give me butterflies</span>
+                </button>
+                <button class="mood-btn" data-mood="adventure" type="button">
+                    <span class="mood-icon">🪐</span><span>Take me away</span>
+                </button>
+                <button class="mood-btn" data-mood="mystery" type="button">
+                    <span class="mood-icon">🔎</span><span>Solve the mystery</span>
+                </button>
+                <button class="mood-btn" data-mood="horror" type="button">
+                    <span class="mood-icon">👻</span><span>Give me chills</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="filter-section">
+            <h2><span class="section-number">02 /</span> Pick a genre</h2>
+            <div class="filter-row">
+                <label for="genre" class="visually-hidden">Choose a genre</label>
+                <select id="genre">
+                    <option value="all">🎬 Any genre</option>
+                    <option value="Musical">Musical</option>
+                    <option value="Action">Action</option>
+                    <option value="Animation">Animation</option>
+                    <option value="Romance">Romance</option>
+                    <option value="Adventure">Adventure</option>
+                    <option value="Comedy">Comedy</option>
+                    <option value="Sci-Fi">Sci-Fi</option>
+                    <option value="Thriller">Thriller</option>
+                    <option value="Drama">Drama</option>
+                    <option value="Horror">Horror</option>
+                    <option value="Mystery">Mystery</option>
+                    <option value="Crime">Crime</option>
+                    <option value="Fantasy">Fantasy</option>
+                </select>
+                <button id="find-btn" type="button">
+                    Find my movie <span aria-hidden="true">↗</span>
+                </button>
+                <button id="surprise-btn" class="surprise-button" type="button">
+                    🎲 Surprise me! </button>
+            </div>
+        </section>
+
+        <section class="recommendation-section">
+            <div class="recommendation-heading">
+                <h2><span class="section-number">03 /</span> Your next watch</h2>
+                <span class="match-label">♥ YOUR MATCH</span>
+            </div>
+
+            <div id="movie-result" class="movie-result">
+                <div class="empty-state">
+                    <span class="empty-icon">🍿</span>
+                    <h3>Your next favourite movie awaits!</h3>
+                    <p>Choose your mood and let ReelSense find your match.</p>
+                </div>
+            </div>
+
+            <p id="feedback" class="feedback" aria-live="polite">
+                Your next movie is waiting. Ready to discover it?
+            </p>
+        </section>
+    </main>
+
+    <footer id="about">
+        <p>REELSENSE © 2026</p>
+        <p>LESS SCROLLING. MORE STORYTELLING. ♥</p>
+    </footer>
+
+</body>
+
+</html>
