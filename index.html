@@ -4,117 +4,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReelSense | Find Your Next Movie</title>
+    <title>CineVerse | Discover Your Next Story</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
 
 <body>
-
     <header class="navbar">
-        <a href="#home" class="logo">Reel<span>Sense</span> ✦</a>
+        <a href="#home" class="logo">CINE<span>VERSE</span> ✦</a>
+
         <nav class="nav-links">
             <a href="#home">Home</a>
-            <a href="#moods">Browse</a>
-            <a href="#movie-result">Your Match</a>
-            <a href="#about">About</a>
+            <a href="#discover">Discover</a>
+            <a href="#recommendation">Your Match</a>
+            <a href="#sceneit">SceneIt Quiz</a>
         </nav>
-        <a href="#movie-result" class="nav-heart" aria-label="Your recommendation">♥</a>
     </header>
 
     <main id="home">
         <section class="hero">
-            <p class="eyebrow">YOUR NEXT MOVIE IS WAITING</p>
-            <h1>What's your <span>vibe</span> tonight?</h1>
+            <p class="eyebrow">YOUR PERSONAL MOVIE UNIVERSE</p>
+            <h1>Every mood has<br>a <span>movie.</span></h1>
             <p class="hero-description">
-                Tell us how you're feeling. We'll find a film that fits your mood.
+                From unforgettable adventures to stories that keep you guessing,
+                discover the perfect film for tonight.
             </p>
+            <a href="#discover" class="hero-button">Find your next watch ↘</a>
+
+            <div class="hero-stats">
+                <div>
+                    <strong>50</strong>
+                    <span>Movies to explore</span>
+                </div>
+                <div>
+                    <strong>8</strong>
+                    <span>Moods to match</span>
+                </div>
+                <div>
+                    <strong>10</strong>
+                    <span>Quiz questions</span>
+                </div>
+            </div>
         </section>
 
-        <section class="mood-section" id="moods">
-            <h2><span class="section-number">01 /</span> Choose your mood</h2>
+        <section class="discover-section" id="discover">
+            <div class="section-heading">
+                <p class="eyebrow">01 / DISCOVER</p>
+                <h2>What are you <span>in the mood for?</span></h2>
+                <p>Choose a feeling and let CineVerse do the searching.</p>
+            </div>
 
             <div class="mood-grid">
-                <button class="mood-btn active" data-mood="comfort" type="button">
-                    <span class="mood-icon">☁️</span><span>Comfort me</span>
+                <button class="mood-btn active" type="button" data-mood="comfort" onclick="chooseMood('comfort', this)">
+                    <span>☁️</span> Comfort me
                 </button>
-                <button class="mood-btn" data-mood="comedy" type="button">
-                    <span class="mood-icon">☀️</span><span>Make me laugh</span>
+
+                <button class="mood-btn" type="button" data-mood="comedy" onclick="chooseMood('comedy', this)">
+                    <span>☀️</span> Make me laugh
                 </button>
-                <button class="mood-btn" data-mood="thoughtful" type="button">
-                    <span class="mood-icon">🧠</span><span>Make me think</span>
+
+                <button class="mood-btn" type="button" data-mood="thoughtful" onclick="chooseMood('thoughtful', this)">
+                    <span>🧠</span> Make me think
                 </button>
-                <button class="mood-btn" data-mood="thriller" type="button">
-                    <span class="mood-icon">⚡</span><span>Keep me on edge</span>
+
+                <button class="mood-btn" type="button" data-mood="thriller" onclick="chooseMood('thriller', this)">
+                    <span>⚡</span> Keep me on edge
                 </button>
-                <button class="mood-btn" data-mood="romance" type="button">
-                    <span class="mood-icon">❤️</span><span>Give me butterflies</span>
+
+                <button class="mood-btn" type="button" data-mood="romance" onclick="chooseMood('romance', this)">
+                    <span>❤️</span> Give me butterflies
                 </button>
-                <button class="mood-btn" data-mood="adventure" type="button">
-                    <span class="mood-icon">🪐</span><span>Take me away</span>
+
+                <button class="mood-btn" type="button" data-mood="adventure" onclick="chooseMood('adventure', this)">
+                    <span>🪐</span> Take me away
                 </button>
-                <button class="mood-btn" data-mood="mystery" type="button">
-                    <span class="mood-icon">🔎</span><span>Solve the mystery</span>
+
+                <button class="mood-btn" type="button" data-mood="mystery" onclick="chooseMood('mystery', this)">
+                    <span>🔎</span> Solve the mystery
                 </button>
-                <button class="mood-btn" data-mood="horror" type="button">
-                    <span class="mood-icon">👻</span><span>Give me chills</span>
+
+                <button class="mood-btn" type="button" data-mood="horror" onclick="chooseMood('horror', this)">
+                    <span>👻</span> Give me chills
+                </button>
+            </div>
+
+            <div class="filter-panel">
+                <div class="filter-control">
+                    <label for="genre">Choose a genre</label>
+                    <select id="genre">
+                        <option value="all">All genres</option>
+                        <option value="Musical">Musical</option>
+                        <option value="Action">Action</option>
+                        <option value="Animation">Animation</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Adventure">Adventure</option>
+                        <option value="Comedy">Comedy</option>
+                        <option value="Sci-Fi">Sci-Fi</option>
+                        <option value="Thriller">Thriller</option>
+                        <option value="Drama">Drama</option>
+                        <option value="Horror">Horror</option>
+                        <option value="Mystery">Mystery</option>
+                        <option value="Crime">Crime</option>
+                        <option value="Fantasy">Fantasy</option>
+                    </select>
+                </div>
+
+                <button class="primary-button" type="button" onclick="findMovie()">
+                    Find my movie ↗
+                </button>
+
+                <button class="secondary-button" type="button" onclick="surpriseMe()">
+                    🎲 Surprise me
                 </button>
             </div>
         </section>
 
-        <section class="filter-section">
-            <h2><span class="section-number">02 /</span> Pick a genre</h2>
-            <div class="filter-row">
-                <label for="genre" class="visually-hidden">Choose a genre</label>
-                <select id="genre">
-                    <option value="all">🎬 Any genre</option>
-                    <option value="Musical">Musical</option>
-                    <option value="Action">Action</option>
-                    <option value="Animation">Animation</option>
-                    <option value="Romance">Romance</option>
-                    <option value="Adventure">Adventure</option>
-                    <option value="Comedy">Comedy</option>
-                    <option value="Sci-Fi">Sci-Fi</option>
-                    <option value="Thriller">Thriller</option>
-                    <option value="Drama">Drama</option>
-                    <option value="Horror">Horror</option>
-                    <option value="Mystery">Mystery</option>
-                    <option value="Crime">Crime</option>
-                    <option value="Fantasy">Fantasy</option>
-                </select>
-                <button id="find-btn" type="button">
-                    Find my movie <span aria-hidden="true">↗</span>
-                </button>
-                <button id="surprise-btn" class="surprise-button" type="button">
-                    🎲 Surprise me! </button>
-            </div>
-        </section>
-
-        <section class="recommendation-section">
-            <div class="recommendation-heading">
-                <h2><span class="section-number">03 /</span> Your next watch</h2>
-                <span class="match-label">♥ YOUR MATCH</span>
+        <section class="recommendation-section" id="recommendation">
+            <div class="section-heading">
+                <p class="eyebrow">02 / YOUR MATCH</p>
+                <h2>Your next <span>great watch.</span></h2>
+                <p>One story could make your entire night.</p>
             </div>
 
             <div id="movie-result" class="movie-result">
                 <div class="empty-state">
                     <span class="empty-icon">🍿</span>
-                    <h3>Your next favourite movie awaits!</h3>
-                    <p>Choose your mood and let ReelSense find your match.</p>
+                    <h3>Your next favourite movie awaits.</h3>
+                    <p>Choose your mood and press Find my movie.</p>
                 </div>
             </div>
 
             <p id="feedback" class="feedback" aria-live="polite">
-                Your next movie is waiting. Ready to discover it?
+                Your movie universe is waiting.
+            </p>
+        </section>
+
+        <section class="sceneit-section" id="sceneit">
+            <div class="section-heading">
+                <p class="eyebrow">03 / SCENEIT</p>
+                <h2>Think you know <span>your movies?</span></h2>
+                <p>Test your film knowledge with 10 multiple-choice questions.</p>
+            </div>
+
+            <div class="quiz-panel">
+                <div class="quiz-topline">
+                    <span id="quiz-progress">READY WHEN YOU ARE</span>
+                    <span id="quiz-score">Score: 0</span>
+                </div>
+
+                <div id="quiz-content">
+                    <div class="quiz-welcome">
+                        <span class="quiz-icon">🎞️</span>
+                        <h3>Lights. Camera. Brainpower.</h3>
+                        <p>Answer 10 movie questions and see how well you know the big screen.</p>
+                        <button class="primary-button" type="button" onclick="startQuiz()">
+                            Start the quiz ↗
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-section" id="about">
+            <p class="eyebrow">THE CINEVERSE IDEA</p>
+            <h2>Less scrolling.<br><span>More storytelling.</span></h2>
+            <p>
+                CineVerse brings movie recommendations and movie trivia together
+                in one cinematic experience. Discover a film, then challenge
+                yourself with SceneIt.
             </p>
         </section>
     </main>
 
-    <footer id="about">
-        <p>REELSENSE © 2026</p>
-        <p>LESS SCROLLING. MORE STORYTELLING. ♥</p>
+    <footer>
+        <p class="footer-logo">CINEVERSE ✦</p>
+        <p>MADE FOR THE LOVE OF MOVIES.</p>
+        <p>© 2026 CINEVERSE</p>
     </footer>
-
 </body>
 
 </html>

@@ -1,648 +1,937 @@
-// REELSENSE: MOVIE RECOMMENDATIONS
+// CINEVERSE
+// Movie Recommendations and SceneIt Quiz
 
-// 1. Movie collection: an array of objects
+// --------------------------------------------------
+// VARIABLES
+// --------------------------------------------------
 
-const movies = [
+var selectedMood = "comfort";
+var quizQuestions = [];
+var currentQuestion = 0;
+var quizScore = 0;
+var answerChosen = false;
 
-    // YOUR LESSON MOVIES
+
+// --------------------------------------------------
+// HELPER FUNCTION
+// Checks whether a value exists in an array
+// --------------------------------------------------
+
+function containsValue(list, value) {
+    var i;
+
+    for (i = 0; i < list.length; i++) {
+        if (list[i] === value) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+// --------------------------------------------------
+// 53 MOVIES
+// --------------------------------------------------
+
+var movies = [
     {
         title: "Hamilton",
         year: 2020,
         genres: ["Musical", "Drama"],
-        rating: "10/10",
-        duration: 160,
-        image: "images/Hamilton.jpg",
-        description: "The life of Alexander Hamilton told through energetic songs and powerful performances.",
-        moods: ["comfort", "thoughtful"],
-        trailer: "https://youtu.be/DSCKfXpAGHc"
+        moods: ["thoughtful", "comfort"],
+        rating: 10,
+        runtime: "160 min",
+        description: "A filmed stage musical about Alexander Hamilton, ambition, revolution and the people who shaped a nation.",
+        poster: "images/Hamilton.jpg"
     },
     {
         title: "The Fast and the Furious",
         year: 2001,
-        genres: ["Action", "Adventure"],
-        rating: "8.5/10",
-        duration: 106,
-        image: "images/The Fast and the Furious.jpg",
-        description: "An action-packed movie filled with fast cars, racing and unforgettable characters.",
+        genres: ["Action", "Crime", "Thriller"],
         moods: ["thriller", "adventure"],
-        trailer: "https://youtu.be/ZsJz2TJAPjw"
+        rating: 8.5,
+        runtime: "106 min",
+        description: "An undercover police officer enters the dangerous world of illegal street racing.",
+        poster: "images/The Fast and the Furious.jpg"
     },
     {
         title: "The Book of Life",
         year: 2014,
         genres: ["Romance", "Animation", "Musical", "Adventure"],
-        rating: "9/10",
-        duration: 95,
-        image: "images/The book of life movie poster.jpg",
-        description: "A colourful animated love story filled with adventure, music and a journey through the Land of the Remembered.",
         moods: ["romance", "adventure", "comfort"],
-        trailer: "https://youtu.be/_i69CJc1BgE"
+        rating: 9,
+        runtime: "95 min",
+        description: "A colourful journey through love, family traditions and the Land of the Remembered.",
+        poster: "images/The book of life movie poster.jpg"
     },
     {
         title: "Jupiter Ascending",
         year: 2015,
-        genres: ["Romance", "Adventure", "Sci-Fi", "Action"],
-        rating: "9/10",
-        duration: 127,
-        image: "images/Jupiter Ascending.jpg",
-        description: "An ordinary woman discovers an extraordinary destiny in a battle for control of the universe.",
-        moods: ["romance", "adventure", "thriller"],
-        trailer: "https://youtu.be/gQHKolIqBGs"
+        genres: ["Sci-Fi", "Action", "Romance", "Adventure"],
+        moods: ["adventure", "romance"],
+        rating: 9,
+        runtime: "127 min",
+        description: "An ordinary young woman discovers that her destiny reaches far beyond Earth.",
+        poster: "images/Jupiter Ascending.jpg"
     },
     {
         title: "Rio",
         year: 2011,
-        genres: ["Musical", "Comedy", "Adventure", "Romance", "Animation"],
-        rating: "9.5/10",
-        duration: 96,
-        image: "images/Rio.jpg",
-        description: "A domesticated blue macaw travels to Rio and discovers adventure, friendship, love and music.",
-        moods: ["comfort", "comedy", "romance", "adventure"],
-        trailer: "https://youtu.be/Bf6zeRwk5LE"
+        genres: ["Animation", "Comedy", "Adventure", "Romance", "Musical"],
+        moods: ["comedy", "adventure", "romance", "comfort"],
+        rating: 9.5,
+        runtime: "96 min",
+        description: "A rare blue macaw leaves his familiar home and discovers friendship, music and adventure in Rio.",
+        poster: "images/Rio.jpg"
     },
     {
         title: "The Epic Bahubali",
         year: 2015,
-        genres: ["Romance", "Action", "Adventure"],
-        rating: "9/10",
-        duration: 159,
-        image: "images/The Epic Bahubali.jpg",
-        description: "An epic story of love, betrayal and war as a warrior discovers his past and fights for his family's kingdom.",
+        genres: ["Action", "Adventure", "Romance", "Fantasy"],
         moods: ["adventure", "romance", "thriller"],
-        trailer: "https://youtu.be/q8nbZbHRcEg"
+        rating: 9,
+        runtime: "159 min",
+        description: "An epic tale of royal secrets, courage, family and a battle for a kingdom.",
+        poster: "images/The Epic Bahubali.jpg"
     },
-
     {
         title: "Paddington 2",
         year: 2017,
-        genres: ["Comedy", "Adventure"],
-        rating: "9/10",
-        duration: 104,
-        image: "images/paddington2.jpg",
-        description: "A kind-hearted bear brings warmth, laughter and unexpected adventure to London.",
+        genres: ["Comedy", "Adventure", "Family"],
         moods: ["comfort", "comedy", "adventure"],
-        trailer: ""
+        rating: 9.5,
+        runtime: "104 min",
+        description: "Paddington tries to find the perfect present for his aunt but ends up in an unexpected adventure.",
+        poster: "images/paddington2.jpg"
     },
     {
         title: "Inside Out",
         year: 2015,
         genres: ["Animation", "Comedy", "Adventure"],
-        rating: "8.5/10",
-        duration: 95,
-        image: "images/inside-out.jpg",
-        description: "Explore the emotions inside a young girl's mind as she adjusts to a new chapter in her life.",
-        moods: ["comfort", "comedy", "thoughtful"],
-        trailer: ""
+        moods: ["comfort", "thoughtful", "comedy"],
+        rating: 9,
+        runtime: "95 min",
+        description: "A young girl's emotions work together as she adjusts to a major change in her life.",
+        poster: "images/inside-out.jpg"
     },
     {
         title: "The Intern",
         year: 2015,
         genres: ["Comedy", "Drama"],
-        rating: "8/10",
-        duration: 121,
-        image: "images/the-intern.jpg",
-        description: "An older intern brings friendship, wisdom and a fresh perspective to a busy workplace.",
         moods: ["comfort", "comedy", "thoughtful"],
-        trailer: ""
+        rating: 8.5,
+        runtime: "121 min",
+        description: "A retired man becomes an intern at a modern company and builds an unlikely friendship with its founder.",
+        poster: "images/the-intern.jpg"
     },
     {
         title: "The Notebook",
         year: 2004,
         genres: ["Romance", "Drama"],
-        rating: "8.5/10",
-        duration: 123,
-        image: "images/the-notebook.jpg",
-        description: "A moving love story about two people whose connection survives life's challenges.",
-        moods: ["romance", "comfort"],
-        trailer: ""
+        moods: ["romance", "thoughtful"],
+        rating: 9,
+        runtime: "123 min",
+        description: "A lasting love story follows two people whose connection survives distance, time and hardship.",
+        poster: "images/the-notebook.jpg"
     },
     {
         title: "Interstellar",
         year: 2014,
         genres: ["Sci-Fi", "Adventure", "Drama"],
-        rating: "9/10",
-        duration: 169,
-        image: "images/interstellar.jpg",
-        description: "A team travels beyond Earth in a desperate mission to help secure humanity's future.",
-        moods: ["adventure", "thoughtful"],
-        trailer: ""
+        moods: ["thoughtful", "adventure"],
+        rating: 9.5,
+        runtime: "169 min",
+        description: "Explorers travel beyond Earth in search of a future for humanity.",
+        poster: "images/interstellar.jpg"
     },
     {
-        title: "Jumanji: Welcome to the Jungle",
-        year: 2017,
-        genres: ["Adventure", "Comedy", "Action"],
-        rating: "8/10",
-        duration: 119,
-        image: "images/jumanji.jpg",
-        description: "Four teenagers enter a dangerous video game where teamwork is their only way out.",
-        moods: ["adventure", "comedy", "thriller"],
-        trailer: ""
+        title: "Jumanji",
+        year: 1995,
+        genres: ["Adventure", "Comedy", "Fantasy"],
+        moods: ["adventure", "comedy"],
+        rating: 8.5,
+        runtime: "104 min",
+        description: "A mysterious board game brings its dangerous jungle world into real life.",
+        poster: "images/jumanji.jpg"
     },
     {
         title: "Coco",
         year: 2017,
-        genres: ["Animation", "Musical", "Adventure"],
-        rating: "9/10",
-        duration: 105,
-        image: "images/coco.jpg",
-        description: "A young musician discovers family secrets on a colourful journey through the Land of the Dead.",
+        genres: ["Animation", "Adventure", "Musical", "Fantasy"],
         moods: ["comfort", "adventure", "thoughtful"],
-        trailer: ""
+        rating: 9.5,
+        runtime: "105 min",
+        description: "A young musician journeys into the Land of the Dead to uncover his family's history.",
+        poster: "images/coco.jpg"
     },
-
     {
         title: "The Conjuring",
         year: 2013,
         genres: ["Horror", "Mystery", "Thriller"],
-        rating: "7.5/10",
-        duration: 112,
-        image: "images/the-conjuring.jpg",
-        description: "Paranormal investigators help a family experiencing terrifying events in their farmhouse.",
-        moods: ["horror", "thriller", "mystery"],
-        trailer: ""
+        moods: ["horror", "thriller"],
+        rating: 8.5,
+        runtime: "112 min",
+        description: "Paranormal investigators help a family experiencing frightening events in their farmhouse.",
+        poster: "images/The Conjuring.jpg"
     },
     {
         title: "Insidious",
         year: 2010,
         genres: ["Horror", "Mystery", "Thriller"],
-        rating: "7/10",
-        duration: 103,
-        image: "images/insidious.jpg",
-        description: "A family fights to save their son after he falls into a mysterious supernatural world.",
-        moods: ["horror", "thriller", "mystery"],
-        trailer: ""
+        moods: ["horror", "thriller"],
+        rating: 8,
+        runtime: "103 min",
+        description: "A family searches for answers when their son falls into a mysterious coma.",
+        poster: "images/Insidious.jpg"
     },
     {
         title: "Annabelle",
         year: 2014,
-        genres: ["Horror", "Mystery", "Thriller"],
-        rating: "6.5/10",
-        duration: 99,
-        image: "images/annabelle.jpg",
+        genres: ["Horror", "Mystery"],
+        moods: ["horror", "thriller"],
+        rating: 7.5,
+        runtime: "99 min",
         description: "A seemingly ordinary doll becomes the centre of terrifying supernatural events.",
-        moods: ["horror", "thriller", "mystery"],
-        trailer: ""
+        poster: "images/Annabelle.jpg"
     },
     {
         title: "A Quiet Place",
         year: 2018,
-        genres: ["Horror", "Thriller", "Sci-Fi"],
-        rating: "8/10",
-        duration: 90,
-        image: "images/a-quiet-place.jpg",
-        description: "A family must remain silent to survive creatures that hunt by sound.",
-        moods: ["horror", "thriller", "adventure"],
-        trailer: ""
+        genres: ["Horror", "Thriller", "Drama"],
+        moods: ["horror", "thriller"],
+        rating: 9,
+        runtime: "90 min",
+        description: "A family must remain almost completely silent to survive creatures that hunt by sound.",
+        poster: "images/A Quiet Place.jpg"
     },
     {
         title: "The Nun",
         year: 2018,
-        genres: ["Horror", "Mystery", "Thriller"],
-        rating: "6/10",
-        duration: 96,
-        image: "images/the-nun.jpg",
-        description: "A priest and a novice investigate the mysterious death of a nun at a secluded abbey.",
-        moods: ["horror", "thriller", "mystery"],
-        trailer: ""
+        genres: ["Horror", "Mystery"],
+        moods: ["horror", "thriller"],
+        rating: 7.5,
+        runtime: "96 min",
+        description: "A priest and a young nun investigate a disturbing secret inside a remote abbey.",
+        poster: "images/The Nun.jpg"
     },
     {
         title: "IT",
         year: 2017,
-        genres: ["Horror", "Mystery", "Thriller"],
-        rating: "7.5/10",
-        duration: 135,
-        image: "images/it.jpg",
-        description: "A group of children confronts a terrifying entity that takes the form of a clown.",
-        moods: ["horror", "thriller", "mystery"],
-        trailer: ""
+        genres: ["Horror", "Thriller"],
+        moods: ["horror", "thriller"],
+        rating: 8,
+        runtime: "135 min",
+        description: "A group of friends confronts a terrifying presence haunting their town.",
+        poster: "images/IT.jpg"
     },
     {
         title: "The Ring",
         year: 2002,
         genres: ["Horror", "Mystery", "Thriller"],
-        rating: "7/10",
-        duration: 115,
-        image: "images/the-ring.jpg",
-        description: "A journalist investigates a mysterious videotape linked to a deadly rumour.",
-        moods: ["horror", "thriller", "mystery"],
-        trailer: ""
+        moods: ["horror", "mystery", "thriller"],
+        rating: 8,
+        runtime: "115 min",
+        description: "A journalist investigates a mysterious recording connected to a frightening rumour.",
+        poster: "images/The Ring.jpg"
     },
     {
         title: "Sinister",
         year: 2012,
         genres: ["Horror", "Mystery", "Thriller"],
-        rating: "7/10",
-        duration: 110,
-        image: "images/sinister.jpg",
-        description: "A crime writer discovers disturbing home movies while researching a family's tragic death.",
-        moods: ["horror", "thriller", "mystery"],
-        trailer: ""
+        moods: ["horror", "mystery", "thriller"],
+        rating: 8,
+        runtime: "110 min",
+        description: "A writer discovers disturbing footage while researching a series of unexplained deaths.",
+        poster: "images/Sinister.jpg"
     },
     {
         title: "The Sixth Sense",
         year: 1999,
-        genres: ["Mystery", "Horror", "Drama"],
-        rating: "8.5/10",
-        duration: 107,
-        image: "images/the-sixth-sense.jpg",
-        description: "A child psychologist tries to help a boy who claims to see people others cannot.",
-        moods: ["mystery", "thoughtful", "horror"],
-        trailer: ""
+        genres: ["Mystery", "Drama", "Thriller"],
+        moods: ["mystery", "thoughtful", "thriller"],
+        rating: 9,
+        runtime: "107 min",
+        description: "A child psychologist tries to help a young boy who claims to see people others cannot.",
+        poster: "images/The Sixth Sense.jpg"
     },
     {
         title: "Shutter Island",
         year: 2010,
         genres: ["Mystery", "Thriller", "Drama"],
-        rating: "8/10",
-        duration: 138,
-        image: "images/shutter-island.jpg",
-        description: "Two detectives investigate a disappearance at an isolated psychiatric facility.",
-        moods: ["mystery", "thriller", "thoughtful"],
-        trailer: ""
+        moods: ["mystery", "thoughtful", "thriller"],
+        rating: 9,
+        runtime: "138 min",
+        description: "Two investigators visit an isolated hospital where nothing seems quite as it appears.",
+        poster: "images/Shutter Island.jpg"
     },
     {
         title: "Gone Girl",
         year: 2014,
-        genres: ["Mystery", "Thriller", "Drama"],
-        rating: "8/10",
-        duration: 149,
-        image: "images/gone-girl.jpg",
-        description: "A husband's life changes dramatically when his wife disappears under suspicious circumstances.",
+        genres: ["Mystery", "Thriller", "Crime"],
         moods: ["mystery", "thriller", "thoughtful"],
-        trailer: ""
+        rating: 8.5,
+        runtime: "149 min",
+        description: "A disappearance turns a marriage into a media spectacle full of suspicion and secrets.",
+        poster: "images/Gone Girl.jpg"
     },
     {
         title: "Murder on the Orient Express",
         year: 2017,
         genres: ["Mystery", "Crime", "Drama"],
-        rating: "7/10",
-        duration: 114,
-        image: "images/orient-express.jpg",
-        description: "Detective Hercule Poirot investigates a murder aboard a train where every passenger is a suspect.",
         moods: ["mystery", "thoughtful"],
-        trailer: ""
+        rating: 8,
+        runtime: "114 min",
+        description: "Detective Hercule Poirot investigates a murder aboard a luxury train.",
+        poster: "images/Murder on the Orient Express.jpg"
     },
     {
         title: "Scream",
         year: 1996,
         genres: ["Horror", "Mystery", "Thriller"],
-        rating: "7.5/10",
-        duration: 111,
-        image: "images/scream.jpg",
-        description: "A masked killer terrorises a town while teenagers try to uncover the identity behind the attacks.",
         moods: ["horror", "mystery", "thriller"],
-        trailer: ""
+        rating: 8.5,
+        runtime: "111 min",
+        description: "A masked killer terrorises a town while a group of teenagers tries to uncover the truth.",
+        poster: "images/Scream.jpg"
     },
     {
         title: "Final Destination",
         year: 2000,
-        genres: ["Horror", "Thriller", "Mystery"],
-        rating: "7/10",
-        duration: 98,
-        image: "images/final-destination.jpg",
-        description: "After escaping a disaster, a group of young people discovers that fate may not be finished with them.",
-        moods: ["horror", "thriller", "mystery"],
-        trailer: ""
+        genres: ["Horror", "Thriller"],
+        moods: ["horror", "thriller"],
+        rating: 8,
+        runtime: "98 min",
+        description: "After escaping a disaster, a group of young people begins to experience a disturbing chain of events.",
+        poster: "images/Final Destination.jpg"
     },
     {
         title: "The Others",
         year: 2001,
         genres: ["Horror", "Mystery", "Thriller"],
-        rating: "8/10",
-        duration: 104,
-        image: "images/the-others.jpg",
-        description: "A mother living in a secluded house begins to suspect that something unexplained is happening around her children.",
-        moods: ["horror", "mystery", "thoughtful"],
-        trailer: ""
+        moods: ["horror", "mystery"],
+        rating: 8.5,
+        runtime: "104 min",
+        description: "A mother living in a dark, isolated house becomes convinced that something is wrong.",
+        poster: "images/The Others.jpg"
     },
     {
         title: "Coraline",
         year: 2009,
-        genres: ["Animation", "Fantasy", "Horror", "Mystery"],
-        rating: "8/10",
-        duration: 100,
-        image: "images/coraline.jpg",
-        description: "A curious girl discovers an alternate world that seems perfect until its sinister secrets emerge.",
-        moods: ["horror", "mystery", "adventure"],
-        trailer: ""
+        genres: ["Animation", "Fantasy", "Horror", "Adventure"],
+        moods: ["adventure", "horror", "mystery"],
+        rating: 9,
+        runtime: "100 min",
+        description: "A curious girl discovers a strange alternate world that hides a sinister secret.",
+        poster: "images/Coraline.jpg"
     },
     {
         title: "The Maze Runner",
         year: 2014,
-        genres: ["Mystery", "Sci-Fi", "Action", "Adventure"],
-        rating: "7/10",
-        duration: 113,
-        image: "images/maze-runner.jpg",
-        description: "A teenager wakes up in a mysterious maze with no memory and must work with others to find a way out.",
-        moods: ["mystery", "thriller", "adventure"],
-        trailer: ""
+        genres: ["Sci-Fi", "Action", "Mystery", "Adventure"],
+        moods: ["adventure", "mystery", "thriller"],
+        rating: 8.5,
+        runtime: "113 min",
+        description: "A teenager wakes up in a maze with other young people and tries to discover why they are there.",
+        poster: "images/The Maze Runner.jpg"
     },
     {
         title: "Now You See Me",
         year: 2013,
         genres: ["Mystery", "Crime", "Thriller"],
-        rating: "7.5/10",
-        duration: 115,
-        image: "images/now-you-see-me.jpg",
-        description: "A team of illusionists performs spectacular heists while detectives try to uncover their secrets.",
-        moods: ["mystery", "thriller", "adventure"],
-        trailer: ""
+        moods: ["mystery", "thoughtful", "thriller"],
+        rating: 8.5,
+        runtime: "115 min",
+        description: "A group of illusionists performs daring tricks while investigators try to work out their methods.",
+        poster: "images/Now You See Me.jpg"
     },
     {
         title: "Escape Room",
         year: 2019,
+        genres: ["Horror", "Thriller", "Mystery"],
+        moods: ["thriller", "mystery", "horror"],
+        rating: 7.5,
+        runtime: "99 min",
+        description: "Strangers must solve dangerous puzzles inside a series of elaborate escape rooms.",
+        poster: "images/Escape Room.jpg"
+    },
+    {
+        title: "Knives Out",
+        year: 2019,
+        genres: ["Mystery", "Crime", "Comedy"],
+        moods: ["mystery", "thoughtful", "comedy"],
+        rating: 9,
+        runtime: "130 min",
+        description: "A detective investigates a wealthy family's secrets after a celebrated novelist dies.",
+        poster: "images/Knives Out.jpg"
+    },
+    {
+        title: "The Avengers",
+        year: 2012,
+        genres: ["Action", "Adventure", "Sci-Fi"],
+        moods: ["adventure", "thriller"],
+        rating: 9,
+        runtime: "143 min",
+        description: "A team of extraordinary heroes joins forces to protect Earth from a powerful threat.",
+        poster: "images/The Avengers.jpg"
+    },
+    {
+        title: "Black Panther",
+        year: 2018,
+        genres: ["Action", "Adventure", "Sci-Fi"],
+        moods: ["adventure", "thoughtful"],
+        rating: 9,
+        runtime: "134 min",
+        description: "A young king must defend his homeland while deciding what kind of leader he will become.",
+        poster: "images/Black Panther.jpg"
+    },
+    {
+        title: "Spider-Man: Into the Spider-Verse",
+        year: 2018,
+        genres: ["Animation", "Action", "Adventure", "Sci-Fi"],
+        moods: ["adventure", "comedy", "comfort"],
+        rating: 9.5,
+        runtime: "117 min",
+        description: "Miles Morales discovers his powers and meets Spider-heroes from different dimensions.",
+        poster: "images/Spider-Man Into the Spider-Verse.jpg"
+    },
+    {
+        title: "The Lion King",
+        year: 1994,
+        genres: ["Animation", "Adventure", "Drama", "Musical"],
+        moods: ["comfort", "adventure", "thoughtful"],
+        rating: 9.5,
+        runtime: "88 min",
+        description: "A young lion learns about responsibility, family and finding the courage to return home.",
+        poster: "images/The Lion King.jpg"
+    },
+    {
+        title: "Finding Nemo",
+        year: 2003,
+        genres: ["Animation", "Adventure", "Comedy"],
+        moods: ["comfort", "adventure", "comedy"],
+        rating: 9,
+        runtime: "100 min",
+        description: "A cautious clownfish crosses the ocean to find his missing son.",
+        poster: "images/Finding Nemo.jpg"
+    },
+    {
+        title: "Shrek",
+        year: 2001,
+        genres: ["Animation", "Comedy", "Fantasy", "Adventure"],
+        moods: ["comedy", "comfort", "adventure"],
+        rating: 9,
+        runtime: "90 min",
+        description: "An unlikely hero sets out to rescue a princess and discovers that appearances can be misleading.",
+        poster: "images/Shrek.jpg"
+    },
+    {
+        title: "The Super Mario Bros. Movie",
+        year: 2023,
+        genres: ["Animation", "Adventure", "Comedy", "Fantasy"],
+        moods: ["comedy", "adventure", "comfort"],
+        rating: 8,
+        runtime: "92 min",
+        description: "Two plumber brothers enter a colourful world full of unexpected challenges.",
+        poster: "images/The Super Mario Bros Movie.jpg"
+    },
+    {
+        title: "Titanic",
+        year: 1997,
+        genres: ["Romance", "Drama"],
+        moods: ["romance", "thoughtful"],
+        rating: 9,
+        runtime: "195 min",
+        description: "Two people from different worlds fall in love aboard a ship on its historic voyage.",
+        poster: "images/Titanic.jpg"
+    },
+    {
+        title: "La La Land",
+        year: 2016,
+        genres: ["Romance", "Musical", "Drama", "Comedy"],
+        moods: ["romance", "thoughtful", "comfort"],
+        rating: 9,
+        runtime: "128 min",
+        description: "An aspiring actress and a jazz musician pursue their dreams while navigating their relationship.",
+        poster: "images/La La Land.jpg"
+    },
+    {
+        title: "Crazy Rich Asians",
+        year: 2018,
+        genres: ["Romance", "Comedy", "Drama"],
+        moods: ["romance", "comedy"],
+        rating: 8.5,
+        runtime: "120 min",
+        description: "A woman discovers the surprising world her boyfriend comes from when she meets his family.",
+        poster: "images/Crazy Rich Asians.jpg"
+    },
+    {
+        title: "The Devil Wears Prada",
+        year: 2006,
+        genres: ["Comedy", "Drama"],
+        moods: ["comedy", "thoughtful"],
+        rating: 8.5,
+        runtime: "109 min",
+        description: "A young assistant navigates the demanding world of a powerful fashion editor.",
+        poster: "images/The Devil Wears Prada.jpg"
+    },
+    {
+        title: "Home Alone",
+        year: 1990,
+        genres: ["Comedy", "Family"],
+        moods: ["comedy", "comfort"],
+        rating: 9,
+        runtime: "103 min",
+        description: "A boy accidentally left home alone comes up with clever ways to protect his house.",
+        poster: "images/Home Alone.jpg"
+    },
+    {
+        title: "The Hangover",
+        year: 2009,
+        genres: ["Comedy"],
+        moods: ["comedy"],
+        rating: 8,
+        runtime: "100 min",
+        description: "Friends try to piece together a chaotic night after waking up with no memory of it.",
+        poster: "images/The Hangover.jpg"
+    },
+    {
+        title: "Jurassic Park",
+        year: 1993,
+        genres: ["Adventure", "Sci-Fi", "Thriller"],
+        moods: ["adventure", "thriller"],
+        rating: 9,
+        runtime: "127 min",
+        description: "A dinosaur theme park becomes dangerous when its carefully planned systems fail.",
+        poster: "images/Jurassic Park.jpg"
+    },
+    {
+        title: "Avatar",
+        year: 2009,
+        genres: ["Sci-Fi", "Action", "Adventure", "Fantasy"],
+        moods: ["adventure", "thoughtful"],
+        rating: 9,
+        runtime: "162 min",
+        description: "A former soldier enters an extraordinary alien world and faces a choice about where he belongs.",
+        poster: "images/Avatar.jpg"
+    },
+    {
+        title: "The Dark Knight",
+        year: 2008,
+        genres: ["Action", "Crime", "Drama", "Thriller"],
+        moods: ["thriller", "thoughtful"],
+        rating: 9.5,
+        runtime: "152 min",
+        description: "Batman faces a dangerous adversary who pushes Gotham into chaos.",
+        poster: "images/The Dark Knight.jpg"
+    },
+    {
+        title: "Get Out",
+        year: 2017,
         genres: ["Horror", "Mystery", "Thriller"],
-        rating: "6.5/10",
-        duration: 99,
-        image: "images/escape-room.jpg",
-        description: "Strangers must solve deadly puzzles inside a series of elaborate rooms to survive.",
-        moods: ["horror", "mystery", "thriller"],
-        trailer: ""
+        moods: ["horror", "mystery", "thoughtful", "thriller"],
+        rating: 9,
+        runtime: "104 min",
+        description: "A weekend visit to meet a girlfriend's family develops into a deeply unsettling experience.",
+        poster: "images/Get Out.jpg"
+    },
+    {
+        title: "The Truman Show",
+        year: 1998,
+        genres: ["Drama", "Comedy", "Sci-Fi"],
+        moods: ["thoughtful", "comedy"],
+        rating: 9,
+        runtime: "103 min",
+        description: "A man begins to question the reality of the world and people around him.",
+        poster: "images/The Truman Show.jpg"
+    },
+    {
+        title: "The Pursuit of Happyness",
+        year: 2006,
+        genres: ["Drama"],
+        moods: ["thoughtful", "comfort"],
+        rating: 9,
+        runtime: "117 min",
+        description: "A father faces serious hardships while working towards a better future for himself and his son.",
+        poster: "images/The Pursuit of Happyness.jpg"
+    },
+    {
+        title: "Dune",
+        year: 2021,
+        genres: ["Sci-Fi", "Adventure", "Drama", "Action"],
+        moods: ["adventure", "thoughtful", "thriller"],
+        rating: 9,
+        runtime: "155 min",
+        description: "A young nobleman travels to a dangerous desert planet tied to his family's future.",
+        poster: "images/Dune.jpg"
     }
 ];
 
-// 2. Select HTML elements using the DOM
 
-const moodButtons = document.querySelectorAll(".mood-btn");
-const genreSelect = document.getElementById("genre");
-const findButton = document.getElementById("find-btn");
-const surpriseButton = document.getElementById("surprise-btn");
-const movieResult = document.getElementById("movie-result");
-const feedback = document.getElementById("feedback");
+// --------------------------------------------------
+// MOOD AND GENRE RECOMMENDATIONS
+// --------------------------------------------------
 
+function chooseMood(mood, button) {
+    selectedMood = mood;
 
-// 3. Remember the selected mood
-// null means the user has not selected a mood.
+    var buttons = document.getElementsByClassName("mood-btn");
+    var i;
 
-let selectedMood = null;
-
-
-// 4. Make mood names easier to understand
-
-const moodDescriptions = {
-    comfort: {
-        name: "Comfort",
-        explanation: "feel-good stories that help you relax and smile"
-    },
-    comedy: {
-        name: "Comedy",
-        explanation: "funny and entertaining stories that make you laugh"
-    },
-    thoughtful: {
-        name: "Thought-provoking",
-        explanation: "stories that make you think and see things differently"
-    },
-    thriller: {
-        name: "Thriller",
-        explanation: "suspenseful stories full of tension and surprises"
-    },
-    romance: {
-        name: "Romance",
-        explanation: "stories about love, relationships and connection"
-    },
-    adventure: {
-        name: "Adventure",
-        explanation: "exciting journeys, discoveries and challenges"
-    },
-    mystery: {
-        name: "Mystery",
-        explanation: "puzzles, secrets and stories you will want to figure out"
-    },
-    horror: {
-        name: "Horror",
-        explanation: "scary, creepy and supernatural experiences"
+    for (i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove("active");
     }
-};
 
+    button.classList.add("active");
 
-// 5. Handle mood button clicks
-
-moodButtons.forEach(function (button) {
-    button.addEventListener("click", function () {
-        selectedMood = button.dataset.mood;
-
-        moodButtons.forEach(function (moodButton) {
-            moodButton.classList.remove("active");
-        });
-
-        button.classList.add("active");
-
-        feedback.textContent =
-            "Mood selected! Now choose a genre or find your movie. ❤️";
-    });
-});
-
-
-// 6. Show a fallback if a poster image is missing
-
-function showPosterFallback(image) {
-    const fallback = document.createElement("div");
-    fallback.className = "poster-fallback";
-
-    const icon = document.createElement("span");
-    icon.className = "poster-icon";
-    icon.textContent = "🎬";
-
-    const title = document.createElement("span");
-    title.textContent = image.alt.replace("Poster for ", "");
-
-    const note = document.createElement("small");
-    note.textContent = "Add this poster to your images folder";
-
-    fallback.append(icon, title, note);
-    image.replaceWith(fallback);
+    document.getElementById("feedback").textContent =
+        "Mood selected! Now find a movie that fits.";
 }
 
 
-// 7. Explain why a movie was recommended
+function findMovie() {
+    var chosenGenre = document.getElementById("genre").value;
+    var matches = [];
+    var i;
+    var movie;
+    var moodMatches;
+    var genreMatches;
 
-function getRecommendationReason(movie, surpriseMode) {
-    const selectedGenre = genreSelect.value;
+    for (i = 0; i < movies.length; i++) {
+        movie = movies[i];
 
-    if (surpriseMode) {
-        return "You chose Surprise Me! This movie was picked to give you something new to discover. 🍿";
+        moodMatches = containsValue(movie.moods, selectedMood);
+        genreMatches = chosenGenre === "all" ||
+            containsValue(movie.genres, chosenGenre);
+
+        if (moodMatches && genreMatches) {
+            matches.push(movie);
+        }
     }
 
-    const reasons = [];
+    if (matches.length === 0) {
+        document.getElementById("movie-result").innerHTML =
+            '<div class="empty-state">' +
+            '<span class="empty-icon">🎬</span>' +
+            '<h3>No exact match found.</h3>' +
+            '<p>Try another genre or choose a different mood.</p>' +
+            '</div>';
 
-    if (selectedMood && moodDescriptions[selectedMood]) {
-        reasons.push(
-            "You wanted " +
-            moodDescriptions[selectedMood].explanation
-        );
-    }
-
-    if (selectedGenre !== "all") {
-        reasons.push(
-            "you chose the " + selectedGenre + " genre"
-        );
-    }
-
-    if (reasons.length === 0) {
-        return "You left your options open, so we picked this movie for you to discover. ❤️";
-    }
-
-    return reasons.join(", and ") +
-        ". " + movie.title + " matches your choices!";
-}
-
-
-// 8. Display the selected movie
-
-function displayMovie(selectedMovie, surpriseMode = false) {
-    const reason = getRecommendationReason(
-        selectedMovie,
-        surpriseMode
-    );
-
-    movieResult.innerHTML = `
-        <article class="movie-card">
-            <img
-                class="movie-poster-image"
-                src="${selectedMovie.image}"
-                alt="Poster for ${selectedMovie.title}"
-            >
-
-            <div class="movie-details">
-                <p class="movie-kicker">
-                    YOUR REELSENSE MATCH ❤️
-                </p>
-
-                <h3>${selectedMovie.title}</h3>
-
-                <p class="movie-description">
-                    ${selectedMovie.description}
-                </p>
-
-                <div class="recommendation-reason">
-                    <h4>💡 Why we picked this movie</h4>
-                    <p>${reason}</p>
-                </div>
-
-                <p class="movie-rating">
-                    ★ Rating: ${selectedMovie.rating}
-                </p>
-
-                <div class="movie-meta">
-                    <span>${selectedMovie.year}</span>
-                    <span>${selectedMovie.genres.join(" / ")}</span>
-                    <span>${selectedMovie.duration} min</span>
-                </div>
-
-                <div class="trailer-container"></div>
-            </div>
-        </article>
-    `;
-
-    // Handle a missing poster image
-    const posterImage = movieResult.querySelector(
-        ".movie-poster-image"
-    );
-
-    posterImage.addEventListener("error", function () {
-        showPosterFallback(posterImage);
-    });
-
-    // Add a trailer link if one is available
-    if (selectedMovie.trailer !== "") {
-        const trailerLink = document.createElement("a");
-
-        trailerLink.className = "trailer-link";
-        trailerLink.href = selectedMovie.trailer;
-        trailerLink.target = "_blank";
-        trailerLink.rel = "noopener noreferrer";
-        trailerLink.textContent = "Watch trailer ↗";
-
-        movieResult.querySelector(".trailer-container")
-            .appendChild(trailerLink);
-    }
-
-    feedback.textContent =
-        "Your next movie is ready! Enjoy your movie night! 🍿";
-}
-
-
-// 9. Find a movie using the selected mood and/or genre
-
-function recommendMovie() {
-    const selectedGenre = genreSelect.value;
-
-    const matchingMovies = movies.filter(function (movie) {
-        // If no mood is selected, allow any mood.
-        const matchesMood =
-            selectedMood === null ||
-            movie.moods.includes(selectedMood);
-
-        // If "All genres" is selected, allow any genre.
-        const matchesGenre =
-            selectedGenre === "all" ||
-            movie.genres.includes(selectedGenre);
-
-        return matchesMood && matchesGenre;
-    });
-
-    // Show a friendly message if no movies match.
-    if (matchingMovies.length === 0) {
-        movieResult.innerHTML = `
-            <div class="empty-state">
-                <span class="empty-icon">🥹</span>
-                <h3>No movie match just yet!</h3>
-                <p>
-                    Try another mood or genre, or use
-                    Surprise Me! to discover something different.
-                </p>
-            </div>
-        `;
-
-        feedback.textContent =
-            "Let's try another combination to find your movie.";
-
+        document.getElementById("feedback").textContent =
+            "Your movie is out there. Try adjusting your choices!";
         return;
     }
 
-    // Choose a random movie from the matching movies.
-    const randomIndex = Math.floor(
-        Math.random() * matchingMovies.length
-    );
+    var randomIndex = Math.floor(Math.random() * matches.length);
+    var chosenMovie = matches[randomIndex];
 
-    const selectedMovie = matchingMovies[randomIndex];
-
-    displayMovie(selectedMovie);
+    displayMovie(chosenMovie);
 }
 
-
-// 10. Surprise the user with a random movie
 
 function surpriseMe() {
-    // If a genre is selected, keep the surprise within that genre.
-    const selectedGenre = genreSelect.value;
+    var chosenGenre = document.getElementById("genre").value;
+    var matches = [];
+    var i;
 
-    const matchingMovies = movies.filter(function (movie) {
-        return selectedGenre === "all" ||
-            movie.genres.includes(selectedGenre);
-    });
+    for (i = 0; i < movies.length; i++) {
+        if (chosenGenre === "all" ||
+            containsValue(movies[i].genres, chosenGenre)) {
+            matches.push(movies[i]);
+        }
+    }
 
-    if (matchingMovies.length === 0) {
-        feedback.textContent =
+    if (matches.length === 0) {
+        document.getElementById("feedback").textContent =
             "No movies found for that genre. Try another one!";
-
         return;
     }
 
-    const randomIndex = Math.floor(
-        Math.random() * matchingMovies.length
-    );
+    var randomIndex = Math.floor(Math.random() * matches.length);
+    var chosenMovie = matches[randomIndex];
 
-    const selectedMovie = matchingMovies[randomIndex];
+    displayMovie(chosenMovie);
 
-    displayMovie(selectedMovie, true);
+    document.getElementById("feedback").textContent =
+        "Surprise! Your next watch is ready. 🍿";
 }
 
 
-// 11. Connect the buttons
+function displayMovie(movie) {
+    var genreText = "";
+    var i;
 
-findButton.addEventListener("click", recommendMovie);
+    for (i = 0; i < movie.genres.length; i++) {
+        if (i > 0) {
+            genreText += " · ";
+        }
 
-if (surpriseButton) {
-    surpriseButton.addEventListener("click", surpriseMe);
+        genreText += movie.genres[i];
+    }
+
+    var trailerURL =
+        "https://www.youtube.com/results?search_query=" +
+        encodeURIComponent(movie.title + " official trailer");
+
+    document.getElementById("movie-result").innerHTML =
+        '<article class="movie-card">' +
+        '<div class="poster-area">' +
+        '<img class="movie-poster-image" src="' +
+        movie.poster +
+        '" alt="Poster for ' + movie.title +
+        '" onerror="showPosterFallback(this)">' +
+        '<div class="poster-fallback" style="display:none;">' +
+        '<span class="poster-icon">🎬</span>' +
+        '<strong>' + movie.title + '</strong>' +
+        '<small>Add this poster to your images folder.</small>' +
+        '</div>' +
+        '</div>' +
+        '<div class="movie-details">' +
+        '<p class="movie-kicker">✦ YOUR CINEVERSE MATCH</p>' +
+        '<h3>' + movie.title + '</h3>' +
+        '<p class="movie-rating">★ Rating: ' + movie.rating + ' / 10</p>' +
+        '<div class="movie-meta">' +
+        '<span>' + movie.year + '</span>' +
+        '<span>' + movie.runtime + '</span>' +
+        '</div>' +
+        '<p class="movie-description">' + movie.description + '</p>' +
+        '<p><strong>Genres:</strong> ' + genreText + '</p>' +
+        '<a class="trailer-link" href="' + trailerURL +
+        '" target="_blank" rel="noopener noreferrer">' +
+        '▶ Watch Trailer ↗' +
+        '</a>' +
+        '</div>' +
+        '</article>';
+
+    document.getElementById("feedback").textContent =
+        "Your match is ready. Enjoy the movie! 🍿";
+
+    var recommendationSection =
+        document.getElementById("recommendation");
+
+    if (recommendationSection) {
+        recommendationSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+}
+
+
+// Show a fallback when the poster image is missing.
+
+function showPosterFallback(image) {
+    image.style.display = "none";
+
+    var fallback =
+        image.parentNode.getElementsByClassName("poster-fallback")[0];
+
+    if (fallback) {
+        fallback.style.display = "flex";
+    }
+}
+
+
+// --------------------------------------------------
+// SCENEIT QUIZ: 10 QUESTIONS
+// --------------------------------------------------
+
+var allQuizQuestions = [
+    {
+        question: "In The Lion King, what is the name of Simba's father?",
+        answers: ["Scar", "Mufasa", "Rafiki", "Zazu"],
+        correct: 1
+    },
+    {
+        question: "Which movie features a character named Jack Dawson?",
+        answers: ["The Notebook", "La La Land", "Titanic", "Avatar"],
+        correct: 2
+    },
+    {
+        question: "In Finding Nemo, what type of fish is Nemo?",
+        answers: ["Clownfish", "Goldfish", "Pufferfish", "Angelfish"],
+        correct: 0
+    },
+    {
+        question: "Which film features a dinosaur theme park?",
+        answers: ["Jumanji", "Jurassic Park", "Dune", "The Maze Runner"],
+        correct: 1
+    },
+    {
+        question: "What is the name of the kingdom in Black Panther?",
+        answers: ["Asgard", "Genovia", "Wakanda", "Zamunda"],
+        correct: 2
+    },
+    {
+        question: "Which movie centres on emotions inside a young girl's mind?",
+        answers: ["Coco", "Shrek", "Inside Out", "Coraline"],
+        correct: 2
+    },
+    {
+        question: "Which movie follows a detective investigating a murder on a train?",
+        answers: [
+            "Knives Out",
+            "The Ring",
+            "Murder on the Orient Express",
+            "Get Out"
+        ],
+        correct: 2
+    },
+    {
+        question: "In The Devil Wears Prada, what industry does Andy work in?",
+        answers: ["Music", "Fashion", "Medicine", "Architecture"],
+        correct: 1
+    },
+    {
+        question: "Which movie features a dangerous maze?",
+        answers: [
+            "The Maze Runner",
+            "The Truman Show",
+            "Hamilton",
+            "The Intern"
+        ],
+        correct: 0
+    },
+    {
+        question: "Which film follows a family that must stay silent to survive?",
+        answers: [
+            "Scream",
+            "The Conjuring",
+            "A Quiet Place",
+            "Annabelle"
+        ],
+        correct: 2
+    }
+];
+
+
+function startQuiz() {
+    quizQuestions = allQuizQuestions;
+    currentQuestion = 0;
+    quizScore = 0;
+    answerChosen = false;
+
+    document.getElementById("quiz-score").textContent = "Score: 0";
+
+    showQuestion();
+}
+
+
+function showQuestion() {
+    answerChosen = false;
+
+    var question = quizQuestions[currentQuestion];
+    var content = '<div class="quiz-question">';
+
+    content +=
+        '<p class="eyebrow">QUESTION ' +
+        (currentQuestion + 1) +
+        ' OF ' +
+        quizQuestions.length +
+        '</p>';
+
+    content += '<h3>' + question.question + '</h3>';
+
+    var i;
+
+    for (i = 0; i < question.answers.length; i++) {
+        content +=
+            '<button class="answer-btn" type="button" ' +
+            'onclick="checkAnswer(' + i + ')">' +
+            String.fromCharCode(65 + i) +
+            '. ' +
+            question.answers[i] +
+            '</button>';
+    }
+
+    content += '<p id="quiz-feedback" class="quiz-feedback"></p>';
+    content += '<div id="quiz-next"></div>';
+    content += '</div>';
+
+    document.getElementById("quiz-content").innerHTML = content;
+
+    document.getElementById("quiz-progress").textContent =
+        "QUESTION " +
+        (currentQuestion + 1) +
+        " / " +
+        quizQuestions.length;
+}
+
+
+function checkAnswer(answerIndex) {
+    if (answerChosen) {
+        return;
+    }
+
+    answerChosen = true;
+
+    var question = quizQuestions[currentQuestion];
+    var buttons = document.getElementsByClassName("answer-btn");
+    var i;
+
+    for (i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = true;
+    }
+
+    if (answerIndex === question.correct) {
+        quizScore++;
+
+        document.getElementById("quiz-feedback").textContent =
+            "Correct! Great movie knowledge. ✓";
+    } else {
+        document.getElementById("quiz-feedback").textContent =
+            "Not quite! The correct answer is: " +
+            question.answers[question.correct] +
+            ".";
+    }
+
+    document.getElementById("quiz-score").textContent =
+        "Score: " + quizScore;
+
+    if (currentQuestion < quizQuestions.length - 1) {
+        document.getElementById("quiz-next").innerHTML =
+            '<button class="primary-button" type="button" ' +
+            'onclick="nextQuestion()">Next question ↗</button>';
+    } else {
+        document.getElementById("quiz-next").innerHTML =
+            '<button class="primary-button" type="button" ' +
+            'onclick="showQuizResult()">See my results ↗</button>';
+    }
+}
+
+
+function nextQuestion() {
+    currentQuestion++;
+
+    showQuestion();
+}
+
+
+function showQuizResult() {
+    var message;
+
+    if (quizScore >= 9) {
+        message = "Incredible! You are a true movie expert.";
+    } else if (quizScore >= 7) {
+        message = "Amazing work! You really know your movies.";
+    } else if (quizScore >= 5) {
+        message = "Not bad! A few more movie nights will help.";
+    } else {
+        message = "Your movie journey is just beginning. Try again!";
+    }
+
+    document.getElementById("quiz-progress").textContent =
+        "QUIZ COMPLETE";
+
+    document.getElementById("quiz-content").innerHTML =
+        '<div class="quiz-result">' +
+        '<span class="quiz-icon">🏆</span>' +
+        '<h3>That is a wrap!</h3>' +
+        '<strong>' +
+        quizScore + ' / ' + quizQuestions.length +
+        '</strong>' +
+        '<p>' + message + '</p>' +
+        '<button class="primary-button" type="button" ' +
+        'onclick="startQuiz()">Play again ↻</button>' +
+        '</div>';
 }
